@@ -1,0 +1,62 @@
+<script src="jquery.min.js"></script>
+<script src="ace/ace.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace/worker-json.js"></script>
+<script src="ace/mode-json.js"></script>
+<script src="beautify.js"></script>
+<link href="normalize.min.css" rel="stylesheet"/>
+<script src="fe.js"></script>
+
+<style type="text/css" media="screen">
+  #editor { 
+      position: absolute;
+      top: 30%;
+      right: 0;
+      bottom: 0;
+      left: 0;
+  }
+</style>
+
+
+<div id="conf">
+<h2><p id="devname"></p> </h2>
+<table border=1>
+<tr>
+<td><div id="mac"></div>
+<td> URL:<td><input type="text" name="url" id="url" value="" class="text"/>    
+<td> Login:        <td><input type="text" name="login" id="login" value="arduino" class="text"/>
+<td> Password:  <td>    <input type="text" name="password" id="password" value="password" class="text"/>
+</tr>
+</table>
+<div id="syscmd">
+<button id="cmd_get">Get config from portal</button>  
+<button id="cmd_save">Save to flash</button>
+<button id="cmd_clear">Clear flash</button>
+<button id="cmd_reboot">Reboot</button>
+<button id="cmd_get_off">Disable config from portal</button>  
+<button id="cmd_get_on">Enable config from portal</button>  
+<button id="cmd_save_off">Autosave OFF</button>  
+<button id="cmd_save_on">Autosave ON</button>  
+
+</div>    
+<table border=1>
+<tr>
+<td>item:<td><select type="text" name="item" id="item" value="" class="text"/> 
+<td>subitem:<td><input type="text" name="subitem" id="subitem"  class="text"/>   
+<td>suffix:<td><select type="text" name="suffix" id="suffix" value="" class="text"/> <option></option><option>/set</option><option>/cmd</option><option>/val</option>>    
+<td>command:<td><input type="text" name="command" id="command" value="toggle" class="text"/> 
+<td><button id="exec">Exec</button>
+</table>
+</div>
+<div id="resp"></div>
+<div id="editorHolder">
+
+
+<button id='get_config_flash'>Load Editor from flash</button>  
+<button id='get_config_ram'>Load Editor from RAM</button>  
+<button id='post_config_flash'>Save Editor to flash</button>
+<button id='cmd_load'>Apply saved Config</button>
+<div id="editor">
+
+</div>
+</div>
+

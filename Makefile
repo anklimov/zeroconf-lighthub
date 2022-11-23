@@ -4,9 +4,8 @@
 # See https://github.com/railduino/zeroconf-lookup
 #
 
-firefox:
+all:   
 	cd Firefox && zip -r -FS ../railduino-zeroconf-lookup.xpi *
-
-chrome:
+	cd ..
 	cd Chrome && zip -r -FS ../railduino-zeroconf-lookup.zip *
 

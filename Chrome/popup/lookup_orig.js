@@ -30,21 +30,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (response.result.length > 0) {
       for (i in response.result) {
         server = response.result[i];
-        
         a = document.createElement('a');
-        a.textContent = server.name + " (" + server.target + ")";
+        a.textContent = server.name;
         a.href = server.url;
         a.classList.add("server", "button");
         server_list.appendChild(a);
-        
-        a = document.createElement('a');
-        a.textContent = "Edit";
-        a.href = "config.html?url="+server.url+"&txt="+server.txt+"&name="+server.target;
-        a.classList.add("server", "button");
-        server_list.appendChild(a);
-        
-        
-        
         br = document.createElement('br');
         server_list.appendChild(br);
         if (Array.isArray(server.txt)) {
