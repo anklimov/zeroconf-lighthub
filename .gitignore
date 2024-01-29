@@ -7,7 +7,7 @@ tags
 *.orig
 
 # Ignore Linux / Apple executable
-zeroconf_lookup
+#zeroconf_lookup
 
 # Ignore vim swap files
 *.swp
