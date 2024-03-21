@@ -59,15 +59,15 @@ document.getElementById('url').value = params['url'];
 function get_config_flash() { get_config('config.json') }
 function post_config_flash() { post_config('config.json') }
 function get_config_ram() { get_config('ram/') }
-function cmd_get() { post_cmd('command/get'),"" }
-function cmd_save() { post_cmd('command/save'),"" }
-function cmd_clear() { post_cmd('command/clear'),"" }
-function cmd_reboot() { post_cmd('command/reboot'),"" }
-function cmd_load() { post_cmd('command/load'),"" }
-function cmd_save_on() { post_cmd('command/save'),"ON" }
-function cmd_save_off() { post_cmd('command/save'),"OFF" }
-function cmd_get_on() { post_cmd('command/get'),"ON" }
-function cmd_get_off() { post_cmd('command/get'),"OFF" }
+function cmd_get() { post_cmd('command/get',"") }
+function cmd_save() { post_cmd('command/save',"") }
+function cmd_clear() { post_cmd('command/clear',"") }
+function cmd_reboot() { post_cmd('command/reboot',"") }
+function cmd_load() { post_cmd('command/load',"") }
+function cmd_save_on() { post_cmd('command/save',"ON") }
+function cmd_save_off() { post_cmd('command/save',"OFF") }
+function cmd_get_on() { post_cmd('command/get',"ON") }
+function cmd_get_off() { post_cmd('command/get',"OFF") }
 
 function exec() {
     post_cmd("item/"+$("select#item").val()+$("input#subitem").val()+$("select#suffix").val(),$("input#command").val())
