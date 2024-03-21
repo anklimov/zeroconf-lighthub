@@ -5,6 +5,8 @@ var jsbOpts = {
 };
 
 window.onload = function () {
+
+    document.getElementById("post_config_flash").addEventListener("click", post_config_flash);
     document.getElementById("get_config_flash").addEventListener("click", get_config_flash);
     document.getElementById("get_config_ram").addEventListener("click", get_config_ram);
     document.getElementById("cmd_get").addEventListener("click", cmd_get);
@@ -55,6 +57,7 @@ document.getElementById('url').value = params['url'];
 
 
 function get_config_flash() { get_config('config.json') }
+function post_config_flash() { post_config('config.json') }
 function get_config_ram() { get_config('ram/') }
 function cmd_get() { post_cmd('command/get'),"" }
 function cmd_save() { post_cmd('command/save'),"" }
