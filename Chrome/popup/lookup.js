@@ -28,42 +28,84 @@ document.addEventListener('DOMContentLoaded', function () {
     server_list.textContent = "";
 
     if (response.result.length > 0) {
+      table = document.createElement('table');
+
+      server_list.appendChild(table);
+
       for (i in response.result) {
         server = response.result[i];
-        
+        raw=table.insertRow(0)
+
+
+        col1 = document.createElement("td");
+        raw.appendChild(col1);
+        col2 = document.createElement("td");
+        raw.appendChild(col2);
+        col3 = document.createElement("td");
+        raw.appendChild(col3);
+
         a = document.createElement('a');
-        a.textContent = server.name + " (" + server.target + ")";
+        a.textContent = server.name ;
+   //     a.href = server.url;
+   //     a.classList.add("server", "button");
+        a.classList.add("h3");
+        col1.appendChild(a);
+
+        br = document.createElement('br');
+        col1.appendChild(br);
+
+        a = document.createElement('a');
+        a.textContent = server.url ;
         a.href = server.url;
         a.classList.add("server", "button");
-        server_list.appendChild(a);
+        col1.appendChild(a);
+
+        br = document.createElement('br');
+        col1.appendChild(br);
+
+        a = document.createElement('a');
+        a.textContent = server.target;
+        a.href = server.url;
+        a.classList.add("server", "button");     
+        
+        col1.appendChild(a);
         
         a = document.createElement('a');
-        a.textContent = "Edit";
-        a.href = "config.html?url="+server.url+"&txt="+server.txt+"&name="+server.target;
-        a.classList.add("server", "button");
-        server_list.appendChild(a);
+        //a.textContent = "Edit";
+        if (server.name.substring(0,8) =="LightHub")
+        {
+        //a.href = "config.html?url="+server.url+"&txt="+server.txt+"&name="+server.target;
+        if (Array.isArray(server.txt)) 
+        a.href = "config.html?url="+server.url+"&name="+server.target+"&"+server.txt.join("&");
+        else 
+        a.href = "config.html?url="+server.url+"&name="+server.target+"&"+server.txt;
+        a.classList.add("server","button");
+        a.classList.add("edit");
+        }
+        else a.classList.add("noedit");
+        //aspan=document.createElement('span');
+        //aspan.classList.add("icon");  
+        //a.appendChild(aspan);
+        col3.appendChild(a);
         
         
         
-        br = document.createElement('br');
-        server_list.appendChild(br);
+
         if (Array.isArray(server.txt)) {
           server.txt.forEach(function(item) {
             line = document.createElement('span');
             line.textContent = item;
-            server_list.appendChild(line);
+            col2.appendChild(line);
             br = document.createElement('br');
-            server_list.appendChild(br);
+            col2.appendChild(br);
           });
         } else if (server.txt != null) {
           line = document.createElement('span');
           line.textContent = server.txt;
-          server_list.appendChild(line);
+          col2.appendChild(line);
           br = document.createElement('br');
-          server_list.appendChild(br);
+          col2.appendChild(br);
         }
-        hr = document.createElement('hr');
-        server_list.appendChild(hr);
       }
     } else {
       div = document.createElement('div');
