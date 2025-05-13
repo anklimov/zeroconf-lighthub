@@ -1,0 +1,42 @@
+{
+  "extensionDescription": {
+    "message": "Finde HTTP Server im lokalen Netzwerk mit Zeroconf",
+    "description": "Description of the extension."
+  },
+
+  "popupTitle": {
+    "message": "Railduino Zeroconf Lookup",
+    "description": "Tooltip for the toolbar button."
+  },
+
+  "htmlHeader": {
+    "message": "Lokale HTTP Server",
+    "description": "Popup window <h3> header"
+  },
+
+  "htmlSource": {
+    "message": "Quelle: ",
+    "description": "Inform about data source."
+  },
+
+  "htmlWaiting": {
+    "message": "Warte auf Antworten",
+    "description": "Display while waiting for responses"
+  },
+
+  "htmlError": {
+    "message": "Das hat leider nicht geklappt",
+    "description": "The popup returned an error"
+  },
+
+  "htmlNoServer": {
+    "message": "Konnte keinen Server finden",
+    "description": "The server list was empty"
+  },
+
+  "htmlCancel": {
+    "message": "Abbrechen (Esc geht auch)",
+    "description": "Popup window Cancel link"
+  }
+}
+

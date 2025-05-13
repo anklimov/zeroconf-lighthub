@@ -1,0 +1,197 @@
+/*
+ *
+ * Written by Volker Wiegand <volker@railduino.de>
+ *
+ * See https://github.com/railduino/zeroconf-lookup
+ */
+
+html, body {
+  /*font-family: arial,helvetica,sans-serif;
+  width:max-content;
+  font-size: 1em;*/
+  min-width: 30em;
+}
+
+h3 {
+  margin: 5px 0 !important;
+}
+/*
+.button.server {
+  padding: 0 2em;
+}
+
+.button.edit {
+  padding: 0 2em;
+}
+*/
+span {
+  padding: 0 2em 0 3em;
+}
+
+.button a, #message {
+  font-weight: bold;
+}
+
+#source {
+  font-size: 0.6em;
+}
+
+/* Spinner source: http://tobiasahlin.com/spinkit/ */
+#spinner {
+  margin: 10px auto;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+#spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+#spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+#spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+#spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+#spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+/* Типографика */
+
+
+/*
+th {
+  letter-spacing: 2px;
+}
+
+td {
+  letter-spacing: 1px;
+}
+*/
+tbody td {
+  text-align: left;
+}
+
+tfoot th {
+  text-align: left;
+}
+
+
+/* Графика и цвета */
+
+thead,
+tfoot {
+
+  color: white;
+  text-shadow: 1px 1px 1px black;
+}
+
+thead th,
+tfoot th,
+tfoot td {
+  background: linear-gradient(to bottom, rgb(0 0 0 / 10%), rgb(0 0 0 / 50%));
+  border: 3px solid #eaf075;
+}
+
+
+table {
+  /*table-layout: fixed;*/
+  width: 80%;
+  /*border-collapse: collapse;*/
+  border: 3px solid #a3e9e3;
+}
+
+
+
+th,
+td {
+  padding: 20px;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: hsl(189, 65%, 90%);
+}
+
+tbody tr:nth-child(even) {
+  background-color: hwb(189 94% 3%);
+}
+/*
+tbody tr {
+  background-color: #ff33cc;
+}
+
+table {
+  background-color: #ff33cc;
+}
+
+
+
+span.icon {
+  background: url(../icons/conf2.png) no-repeat -54px -36px;
+    background-color: rgba(0, 0, 0, 0);
+    background-position-x: -54px;
+    background-position-y: -36px;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-image: url("../icons/conf2.png");
+    background-size: auto;
+    background-origin: padding-box;
+    background-clip: border-box;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+*/
+a.edit{
+  background: url(../icons/conf2.png) no-repeat;
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+
+a.noedit{
+  background: url(../icons/conf2.png) no-repeat;
+  display: block;
+  opacity: 0.5;
+  width: 30px;
+  height: 30px;
+}
+
+a.h3{
+
+  font-weight:bold;
+}
