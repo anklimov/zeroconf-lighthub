@@ -5,6 +5,55 @@
 <script src="beautify.js"></script>
 <link href="normalize.min.css" rel="stylesheet"/>
 <script src="fe.js"></script>
+<script>
+// filepath: /workspaces/zeroconf-lighthub/Chrome/popup/config.html
+// ...existing code...
+
+// Получение devname
+function getDevName() {
+  return document.getElementById('devname').textContent.trim();
+}
+
+// Ключ для localStorage
+function getStorageKey(field) {
+  const dev = getDevName();
+  return dev ? `lhub_${dev}_${field}` : null;
+}
+
+// Загрузка логина и пароля при смене devname
+function loadAuthFields() {
+  const loginKey = getStorageKey('login');
+  const passKey = getStorageKey('password');
+  if (loginKey) {
+    const login = localStorage.getItem(loginKey);
+    if (login !== null) document.getElementById('login').value = login;
+  }
+  if (passKey) {
+    const pass = localStorage.getItem(passKey);
+    if (pass !== null) document.getElementById('password').value = pass;
+  }
+}
+
+// Сохранение логина и пароля при изменении
+function saveAuthField(field) {
+  const key = getStorageKey(field);
+  if (key) {
+    const val = document.getElementById(field).value;
+    localStorage.setItem(key, val);
+  }
+}
+
+document.getElementById('login').addEventListener('input', () => saveAuthField('login'));
+document.getElementById('password').addEventListener('input', () => saveAuthField('password'));
+
+// Если devname меняется динамически, вызовите loadAuthFields() после его изменения
+// Например, если devname устанавливается через JS:
+const devnameObserver = new MutationObserver(loadAuthFields);
+devnameObserver.observe(document.getElementById('devname'), { childList: true });
+
+// Вызвать при загрузке
+window.addEventListener('DOMContentLoaded', loadAuthFields);
+</script>
 
 <style>
   body {
