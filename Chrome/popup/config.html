@@ -1,59 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
 <script src="jquery.min.js"></script>
 <script src="ace/ace.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="ace/worker-json.js"></script>
 <script src="ace/mode-json.js"></script>
 <script src="beautify.js"></script>
 <link href="normalize.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+
 <script src="fe.js"></script>
-<script>
-// filepath: /workspaces/zeroconf-lighthub/Chrome/popup/config.html
-// ...existing code...
-
-// Получение devname
-function getDevName() {
-  return document.getElementById('devname').textContent.trim();
-}
-
-// Ключ для localStorage
-function getStorageKey(field) {
-  const dev = getDevName();
-  return dev ? `lhub_${dev}_${field}` : null;
-}
-
-// Загрузка логина и пароля при смене devname
-function loadAuthFields() {
-  const loginKey = getStorageKey('login');
-  const passKey = getStorageKey('password');
-  if (loginKey) {
-    const login = localStorage.getItem(loginKey);
-    if (login !== null) document.getElementById('login').value = login;
-  }
-  if (passKey) {
-    const pass = localStorage.getItem(passKey);
-    if (pass !== null) document.getElementById('password').value = pass;
-  }
-}
-
-// Сохранение логина и пароля при изменении
-function saveAuthField(field) {
-  const key = getStorageKey(field);
-  if (key) {
-    const val = document.getElementById(field).value;
-    localStorage.setItem(key, val);
-  }
-}
-
-document.getElementById('login').addEventListener('input', () => saveAuthField('login'));
-document.getElementById('password').addEventListener('input', () => saveAuthField('password'));
-
-// Если devname меняется динамически, вызовите loadAuthFields() после его изменения
-// Например, если devname устанавливается через JS:
-const devnameObserver = new MutationObserver(loadAuthFields);
-devnameObserver.observe(document.getElementById('devname'), { childList: true });
-
-// Вызвать при загрузке
-window.addEventListener('DOMContentLoaded', loadAuthFields);
-</script>
 
 <style>
   body {
@@ -120,13 +77,95 @@ window.addEventListener('DOMContentLoaded', loadAuthFields);
     color: #d32f2f;
     font-weight: bold;
   }
+  .fa-btn {
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+.fa-btn:hover {
+  background: #e3eafc;
+  color: #1565c0;
+}
+.fa {
+  font-size: 20px !important;
+  vertical-align: middle;
+}
+.switch-label {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 10px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: normal;
+}
+.switch-label input[type="checkbox"] {
+  display: none;
+}
+.switch-slider {
+  width: 36px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 12px;
+  position: relative;
+  margin-right: 8px;
+  transition: background 0.2s;
+  display: inline-block;
+}
+.switch-slider:before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+.switch-label input:checked + .switch-slider {
+  background: #1976d2;
+}
+.switch-label input:checked + .switch-slider:before {
+  transform: translateX(16px);
+}
+.switch-text {
+  margin-left: 2px;
+  font-size: 15px;
+  color: #1976d2;
+  font-weight: bold;
+}
+.editor-section {
+  border: 1px solid #1976d2;
+  border-radius: 8px;
+  padding: 12px 18px 8px 18px;
+  margin-bottom: 12px;
+  background: #fafdff;
+}
+.editor-section-title {
+  font-weight: bold;
+  color: #1976d2;
+  margin-bottom: 8px;
+  margin-left: 2px;
+}
+#editorHolder {
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 24px;
+}
 </style>
-
+</head>
+<body>
 <div id="conf">
   <h2><span id="devname"></span></h2>
   <table>
     <tr>
-      <td><div id="mac"></div></td>
+      <td><div id="mac" style="display:none"></div></td>
       <td>URL:</td>
       <td><input type="text" name="url" id="url" value="" class="text"/></td>
       <td>Login:</td>
@@ -137,14 +176,37 @@ window.addEventListener('DOMContentLoaded', loadAuthFields);
   </table>
 
   <div id="syscmd">
-    <button id="cmd_get">Get config from portal</button>
-    <button id="cmd_save">Save to flash</button>
-    <button id="cmd_clear">Clear flash</button>
-    <button id="cmd_reboot">Reboot</button>
-    <button id="cmd_get_off">Disable config from portal</button>
-    <button id="cmd_get_on">Enable config from portal</button>
-    <button id="cmd_save_off">Autosave OFF</button>
-    <button id="cmd_save_on">Autosave ON</button>
+    <!-- Переключатель "Конфиг с портала" -->
+    <label class="switch-label" title="Включить/отключить конфиг с портала">
+      <input type="checkbox" id="portal_config_switch">
+      <span class="switch-slider"></span>
+      <span class="switch-text">Конфиг с портала</span>
+    </label>
+
+    <button id="cmd_get" class="fa-btn" title="Получить конфиг с портала">
+      <i class="fa fa-cloud-download"></i>
+    </button>
+
+    <!-- Переключатель "Автосохранение конфига" -->
+    <label class="switch-label" title="Включить/отключить автосохранение конфига">
+      <input type="checkbox" id="autosave_switch">
+      <span class="switch-slider"></span>
+      <span class="switch-text">Автосохранение конфига</span>
+    </label>  
+    <button id="cmd_save" class="fa-btn" title="Сохранить во Flash">
+      <i class="fa fa-save"></i>
+    </button>
+
+    <button id="cmd_clear" class="fa-btn" title="Очистить Flash">
+      <i class="fa fa-eraser"></i>
+    </button>
+    <button id="cmd_reboot" class="fa-btn" title="Перезагрузить">
+      <i class="fa fa-refresh"></i>
+    </button>
+
+    <button id='cmd_load' class="fa-btn" title="Применить сохранённый конфиг">
+      <i class="fa fa-check"></i>
+    </button>
   </div>
 
   <table>
@@ -160,24 +222,108 @@ window.addEventListener('DOMContentLoaded', loadAuthFields);
           <option>/set</option>
           <option>/cmd</option>
           <option>/val</option>
+          <option>/fan</option>
+          <option>/ctrl</option>
+          <option>/mode</option>
+          <option>/hue</option>
+          <option>/sat</option>
+          <option>/temp</option>
+          <option>/del</option>
+          <option>/HSV</option>
+          <option>/RGB</option>         
         </select>
       </td>
       <td>command:</td>
-      <td><input type="text" name="command" id="command" value="toggle" class="text"/></td>
-      <td><button id="exec">Exec</button></td>
+      <td>
+        <input type="text" list="commands" name="command" id="command" class="text">
+        <datalist id="commands">
+          <option value="ON">
+          <option value="OFF">
+          <option value="TOGGLE">
+          <option value="HALT">
+          <option value="REST">
+          <option value="XON">
+          <option value="XOFF">
+          <option value="%+5">
+          <option value="%-5">      
+          <option value="ENABLE">
+          <option value="DISABLE">
+          <option value="FREEZE">
+          <option value="UNFREEZE">
+          <option value="AUTO">
+          <option value="FAN_ONLY">
+          <option value="HEAT_COOL">
+          <option value="HEAT">
+          <option value="COOL">
+          <option value="DRY">
+          <option value="HIGH">
+          <option value="MEDIUM">
+          <option value="LOW">
+          <option value="RGB"> 
+          <option value="HSV">                 
+        </datalist>
+      </td>
+      <td>
+        <button id="exec" class="fa-btn" title="Выполнить команду">
+          <i class="fa fa-play"></i>
+        </button>
+      </td>
     </tr>
   </table>
 
   <div id="resp"></div>
 
-  <div id="editorHolder">
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-      <button id='get_config_flash'>Load Editor from flash</button>
-      <button id='get_config_ram'>Load Editor from RAM</button>
-      <button id='post_config_flash'>Save Editor to flash</button>
-      <button id='cmd_load'>Apply saved Config</button>
+  <div id="editorHolder" style="display: flex; flex-direction: column; gap: 0; margin-top: 24px;">
+    <div class="editor-section">
+      <div class="editor-section-title">Загрузить в редактор</div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id='get_config_flash' class="fa-btn" title="Загрузить из Flash">
+          <i class="fa fa-microchip"></i>
+        </button>
+
+        <button id="editor_load_local" class="fa-btn" title="Восстановить из браузера">
+          <i class="fa fa-upload"></i>
+        </button>
+
+        <button id="editor_upload" class="fa-btn" title="Загрузить из файла">
+          <i class="fa fa-folder-open"></i>
+        </button>
+
+        <input type="file" id="editor_file_input" style="display:none" accept=".json,application/json">
+        
+        <button id='get_config_ram' class="fa-btn" title="Загрузить из RAM">
+          <i class="fa fa-memory"></i>
+        </button>
+      </div>
     </div>
-    <div id="editor"></div>
+    <div class="editor-section">
+      <div class="editor-section-title">Сохранить из редактора</div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id='post_config_flash' class="fa-btn" title="Сохранить во Flash">
+          <i class="fa fa-microchip"></i>
+        </button>
+        <button id="editor_save_local" class="fa-btn" title="Сохранить в браузер">
+          <i class="fa fa-download"></i>
+        </button>
+        <button id="editor_download" class="fa-btn" title="Скачать как JSON">
+          <i class="fa fa-save"></i>
+        </button>
+      </div>
+    </div>
+    <div style="flex:2; min-width:320px;">
+      <div id="editor"></div>
+    </div>
   </div>
 </div>
+<div id="sysinfo-section" style="margin: 24px auto; max-width:900px;">
+  <div id="sysinfo-header" style="cursor:pointer; display:flex; align-items:center; font-weight:bold; color:#1976d2;">
+    <span id="sysinfo-toggle" style="font-size:22px; margin-right:8px;">+</span>
+    Системная информация
+  </div>
+  <div id="sysinfo-content" style="display:none; background:#fff; border-radius:8px; box-shadow:0 2px 8px #0001; padding:18px 24px; margin-top:8px; font-family:monospace; font-size:15px;">
+    <div id="sysinfo-loading">Загрузка...</div>
+    <pre id="sysinfo-data"></pre>
+  </div>
+</div>
+<script src="config.js"></script>
 

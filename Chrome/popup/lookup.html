@@ -4,10 +4,16 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="lookup.css" />
     <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+
   </head>
   <body>
     <h3 id="header">Local HTTP Servers</h3>
     <div id="source"></div>
+        <div class="button">
+      <button id="cancel" class="fa-btn-cancel" title="Закрыть окно">
+      <i class="fa-solid fa-square-xmark"></i>
+      </button>
+    </div>
     <hr>
     <div id="server_list">
       <div id="waiting">Waiting for Response</div>
@@ -21,9 +27,14 @@
       </div>
       <hr>
     </div>
-    <div class="button">
-      <a id="cancel" href="#">Cancel (or press Esc)</a>
+    <div id="manual-add" style="display: flex; gap: 8px; align-items: center; margin: 16px 0;">
+      <input type="text" id="manual_name" placeholder="Имя сервера" style="flex:2; min-width:120px;">
+      <input type="text" id="manual_ip" placeholder="IP адрес" style="flex:2; min-width:120px;">
+      <button id="manual_add_btn" class="fa-btn" title="Добавить сервер">
+        <i class="fa fa-plus-circle"></i>
+      </button>
     </div>
+
     <script src="lookup.js"></script>
   </body>
 </html>

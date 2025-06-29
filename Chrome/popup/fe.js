@@ -14,12 +14,31 @@ window.onload = function () {
     document.getElementById("cmd_load").addEventListener("click", cmd_load);
     document.getElementById("cmd_clear").addEventListener("click", cmd_clear);
     document.getElementById("cmd_reboot").addEventListener("click", cmd_reboot);
-    document.getElementById("cmd_get_on").addEventListener("click", cmd_get_on);
-    document.getElementById("cmd_save_on").addEventListener("click", cmd_save_on);   
-    document.getElementById("cmd_get_off").addEventListener("click", cmd_get_off);
-    document.getElementById("cmd_save_off").addEventListener("click", cmd_save_off);
+    //document.getElementById("cmd_get_on").addEventListener("click", cmd_get_on);
+    //document.getElementById("cmd_save_on").addEventListener("click", cmd_save_on);   
+    //document.getElementById("cmd_get_off").addEventListener("click", cmd_get_off);
+    //document.getElementById("cmd_save_off").addEventListener("click", cmd_save_off);
     document.getElementById("exec").addEventListener("click", exec);
     document.getElementById("item").addEventListener("change", get_status);
+
+    // Переключатель "Конфиг с портала"
+    document.getElementById('portal_config_switch').addEventListener('change', function() {
+      if (this.checked) {
+        cmd_get_on();
+      } else {
+        cmd_get_off();
+      }
+    });
+
+    // Переключатель "Автосохранение конфига"
+    document.getElementById('autosave_switch').addEventListener('change', function() {
+      if (this.checked) {
+        cmd_save_on();
+      } else {
+        cmd_save_off();
+      }
+    });
+    
 }
 
 $(document).ready(function(){  
@@ -36,18 +55,14 @@ var params = window
         },
         {}
     );
-document.getElementById('devname').innerHTML = params['name']+" control panel"; 
+document.getElementById('devname').innerHTML = params['name']; 
 document.getElementById('mac').innerHTML = params['mac']; 
+if (params['url'].slice(-1) != "/" ) params['url'] += "/";
 document.getElementById('url').value = params['url'];
-//"http://"+params['ip']+":"+params['port'];
 
-  editor = ace.edit("editor");  
-
- 
-  
+editor = ace.edit("editor");  
   //editor.setWrapBehavioursEnabled(true);
   //ace.config.set("basePath", "ace/");
-  
   //editor.setTheme("ace/theme/twilight");
   editor.session.setMode("ace/mode/json");
   editor.getSession().setTabSize(2);
@@ -97,14 +112,16 @@ function get_config(endpoint) {
     .done(function (response) {
     editor.setValue(  js_beautify( JSON.stringify( response ), jsbOpts));
     document.getElementById("resp").innerHTML = "Loaded "+endpoint;
-    var txt;
+    var txt = "";
     myObj = JSON.parse(JSON.stringify( response ));
-        txt += "<select>"
+     //   txt += "<select>"
         for (var key in myObj.items) {
-             txt += "<option>" + key;
+             txt += "<option>" + key + "</option>";
         }
-        txt += "</select>" 
+       // txt += "</select>" 
         document.getElementById("item").innerHTML = txt;
+
+  fetchAndShowSysInfo();
     
   })
     .fail(function (jqXHR, exception) {
@@ -130,10 +147,7 @@ function get_config(endpoint) {
             msg = 'Uncaught Error.\n' + jqXHR.responseText;
         }
         document.getElementById("resp").innerHTML = "Error "+jqXHR.status+" "+msg;
-    });
-
-
-  
+    });  
 };
 
 function post_config(endpoint) {
@@ -151,7 +165,6 @@ function post_config(endpoint) {
           },
     "timeout": 20000,
     "data": editor.getValue(),
-
   };
 
   $.ajax(settings)
@@ -231,9 +244,6 @@ function get_cmd(endpoint) {
         }
         document.getElementById("resp").innerHTML = "Error "+" "+jqXHR.status+msg;
     });
-
-
-
 }
 
 function post_cmd(endpoint, param) {
@@ -284,7 +294,4 @@ function post_cmd(endpoint, param) {
         }
         document.getElementById("resp").innerHTML = "Error "+" "+jqXHR.status+" "+msg;
     });
-
-
-
 }
