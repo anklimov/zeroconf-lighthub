@@ -42,32 +42,36 @@ window.onload = function () {
 }
 
 $(document).ready(function(){  
-var params = window
-    .location
-    .search
-    .replace('?','')
-    .split('&')
-    .reduce(
-        function(p,e){
-            var a = e.split('=');
-            p[ decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
-            return p;
-        },
-        {}
-    );
-document.getElementById('devname').innerHTML = params['name']; 
-document.getElementById('mac').innerHTML = params['mac']; 
-if (params['url'].slice(-1) != "/" ) params['url'] += "/";
-document.getElementById('url').value = params['url'];
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  const mac = params.get('mac');
+  let url = params.get('url');
 
-editor = ace.edit("editor");  
+  if (name) {
+    document.getElementById('devname').textContent = name;
+  }
+  if (mac) {
+    document.getElementById('mac').textContent = mac;
+    document.getElementById('mac').style.display = '';
+  }
+  if (url) {
+    if (!url.endsWith('/')) {
+      url += '/';
+    }
+    document.getElementById('url').value = url;
+  }
+
+  editor = ace.edit("editor");
   //editor.setWrapBehavioursEnabled(true);
   //ace.config.set("basePath", "ace/");
   //editor.setTheme("ace/theme/twilight");
   editor.session.setMode("ace/mode/json");
   editor.getSession().setTabSize(2);
   editor.getSession().setUseWrapMode(true);
-  get_config("config.json");
+
+  if (document.getElementById('url').value) {
+    get_config("config.json");
+  }
 });
 
 
