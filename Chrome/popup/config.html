@@ -11,7 +11,11 @@
 <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
 
 <script src="fe.js"></script>
-
+<!--
+  Apache rewrite example to map /pwa to config.html while preserving query parameters:
+    RewriteEngine On
+    RewriteRule ^pwa$ /config.html [L,QSA]
+-->
 <style>
   body {
     font-family: Arial, sans-serif;

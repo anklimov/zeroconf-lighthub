@@ -12,6 +12,53 @@ function getStorageKey(field) {
   return dev ? `lhub_${dev}_${field}` : null;
 }
 
+function normalizeMac(mac) {
+  if (!mac) return '';
+  const raw = mac.toString().trim().toLowerCase().replace(/[^0-9a-f]/g, '');
+  return raw.length === 12 ? raw.match(/.{2}/g).join(':') : mac;
+}
+
+function setMacValue(mac) {
+  const macDiv = document.getElementById('mac');
+  if (!macDiv) return;
+  const normalized = normalizeMac(mac);
+  if (normalized) {
+    macDiv.textContent = `MAC: ${normalized}`;
+    macDiv.style.display = '';
+  } else {
+    macDiv.textContent = '';
+    macDiv.style.display = 'none';
+  }
+}
+
+function setDevName(name) {
+  if (!name) return;
+  const devname = document.getElementById('devname');
+  if (devname) devname.textContent = name;
+}
+
+function applyQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  const mac = params.get('mac');
+  const ip = params.get('ip');
+  const port = params.get('port');
+  const url = params.get('url');
+
+  if (name) setDevName(name);
+  if (mac) {
+    setMacValue(mac);
+  } else {
+    setMacValue('');
+  }
+
+  if (ip && port) {
+    document.getElementById('url').value = `http://${ip}:${port}/`;
+  } else if (url) {
+    document.getElementById('url').value = url;
+  }
+}
+
 // Загрузка логина и пароля при смене devname
 function loadAuthFields() {
   const loginKey = getStorageKey('login');
@@ -45,17 +92,20 @@ const devnameObserver = new MutationObserver(loadAuthFields);
 devnameObserver.observe(document.getElementById('devname'), { childList: true });
 
 // Вызвать при загрузке
-window.addEventListener('DOMContentLoaded', loadAuthFields);
+window.addEventListener('DOMContentLoaded', function() {
+  applyQueryParams();
+  loadAuthFields();
+});
 
 // Скрывать MAC если undefined
 document.addEventListener('DOMContentLoaded', function() {
-    var macDiv = document.getElementById('mac');
-    if (!macDiv.textContent || macDiv.textContent.trim().toLowerCase() === 'undefined') {
-      macDiv.style.display = 'none';
-    } else {
-      macDiv.style.display = '';
-    }
-  });
+  var macDiv = document.getElementById('mac');
+  if (!macDiv.textContent || macDiv.textContent.trim().toLowerCase() === 'undefined') {
+    macDiv.style.display = 'none';
+  } else {
+    macDiv.style.display = '';
+  }
+});
 
 
 // Ключ для localStorage
